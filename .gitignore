@@ -32,3 +32,4 @@ dist
 /RUNNING_PID
 /.settings
 /uploads
+conf/application.conf
