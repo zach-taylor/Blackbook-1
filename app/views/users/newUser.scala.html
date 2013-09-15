@@ -1,5 +1,4 @@
-@(users: List[User.User], userForm: Form[(String, String, String, Long)])(implicit user: User.User)
-
+@(users: List[User.User], userForm: Form[(String, String, String, Long)])(implicit token: play.filters.csrf.CSRF.Token, user: User.User)
 @import helper._
 
 @main("Blackbook | New User") {
@@ -11,7 +10,7 @@
   }
   </div>
   <div id="dashboard-content">
-  @form(routes.Users.createUser, args = 'id -> "create-user-form") {
+  @form(CSRF(routes.Users.createUser), args = 'id -> "create-user-form") {
       @inputText(userForm("name"), args = '_label -> "Username", 'class -> "fancy-input") 
       @inputText(userForm("email"), args = '_label -> "Email", 'class -> "fancy-input") 
       @inputText(userForm("password"), args = '_label -> "Password", 'class -> "fancy-input") 

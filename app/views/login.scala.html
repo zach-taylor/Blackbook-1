@@ -1,4 +1,6 @@
-@(loginForm: Form[(String, String)])(implicit flash: Flash)
+@(loginForm: Form[(String, String)])(implicit token: play.filters.csrf.CSRF.Token, flash: Flash)
+@import helper._
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 <head>
@@ -20,7 +22,7 @@
 }
 
 <p class="message">You must be logged in to view this site.</p>
-@helper.form(action = routes.Application.authenticate) {
+@helper.form(action = CSRF(routes.Application.authenticate)) {
     <p>
       <label>Username<br />
       <input type="text" name="username" id="username" class="input" value="@loginForm("username").value" size="20" tabindex="10" />

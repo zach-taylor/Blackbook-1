@@ -1,4 +1,4 @@
-@(productForm: Form[(String, String)])(implicit user: User.User)
+@(productForm: Form[(String, String)])(implicit token: play.filters.csrf.CSRF.Token, user: User.User)
 
 @import helper._
 
@@ -9,7 +9,7 @@
     <a href="@routes.Products.products()" style="width:100%;" class="fancy-button">Browse Products</a>
   </div>
   <div id="dashboard-content">
-  @form(routes.Products.createProduct) {
+  @form(CSRF(routes.Products.createProduct)) {
       @inputText(productForm("name"), args = '_label -> "Name", 'class -> "fancy-input") 
       @textarea(productForm("description"), args = 'rows -> 10, 'cols -> 90, '_label -> "Description", 'class -> "fancy-text-input")
       <input class="fancy-button" type="submit" value="Create">

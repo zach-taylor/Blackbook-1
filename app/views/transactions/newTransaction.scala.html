@@ -1,4 +1,4 @@
-@(transactionForm: Form[(Int, String, Int, BigDecimal, String)])(implicit user: User.User)
+@(transactionForm: Form[(Int, String, Int, BigDecimal, String)])(implicit token: play.filters.csrf.CSRF.Token, user: User.User)
 
 @import helper._
 
@@ -16,7 +16,7 @@
       </dd>
       <dd class="info">Required</dd>
   </dl>
-  @form(routes.Transactions.createTransaction) {
+  @form(CSRF(routes.Transactions.createTransaction)) {
       <input type="hidden" id="product-id" name="productId" value="" class="fancy-input">
       @inputText(transactionForm("userName"), args = '_label -> "Client Username", 'class -> "fancy-input", 'id -> "username")
       @inputText(transactionForm("quantity"), args = '_label -> "Quantity", 'class -> "fancy-input")

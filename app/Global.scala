@@ -3,8 +3,9 @@ import play.api._
 import play.api.mvc._
 import play.api.mvc.Results._
 import util.ExtendedHeaders._
+import play.filters.csrf._
 
-object Global extends GlobalSettings { 
+object Global extends WithFilters(CSRFFilter()) with GlobalSettings { 
   
   // When an exception occurs in your application, the onError operation will be called.
   override def onError(request: RequestHeader, ex: Throwable) = {
