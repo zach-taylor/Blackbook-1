@@ -64,8 +64,8 @@ object Application extends Controller with Secured {
   }
 
   def logout = Action { 
-    //Redirect(routes.Decoy.home).withNewSession
-    Redirect(routes.Decoy.home)
+    Redirect(routes.Decoy.home).withNewSession
+    //Redirect(routes.Decoy.home)
   }
 
   def authenticate = Action { implicit request =>
