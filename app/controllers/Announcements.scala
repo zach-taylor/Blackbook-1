@@ -1,6 +1,6 @@
 package controllers
 
-import java.io.File
+
 import models._
 import models.{Permission => Perm}
 import play.api._
@@ -23,7 +23,7 @@ object Announcements extends Controller with Secured {
     Ok(views.html.messages(Announcement.all(), announcementForm))
   }
 
-  def createAnnouncement() = WithPermissions(Perm.EditUsers) { implicit request =>
+  def createAnnouncement() = WithPermissions(Perm.MakeAnnouncements) { implicit request =>
     announcementForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.messages(Announcement.all(), formWithErrors)),
       form => {

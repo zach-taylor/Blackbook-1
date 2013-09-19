@@ -29,6 +29,6 @@
 </table>
 <br />
 <br />
-@if(user.hasPermission(Permission.ViewUsers)) {
+@if(user.hasPermission(Permission.EditUsers)) {
    <a href="@routes.Users.editUser(userToView.name)" class="fancy-button">Edit User</a>
 }
