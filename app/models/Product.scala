@@ -2,14 +2,18 @@ package models
 
 import anorm._
 import anorm.SqlParser._
+
 import play.api.db._
 import play.api.Play.current
-import scala.language.postfixOps
+
 import util.Db
+
 import java.util.Date
 import java.io.File
+
 import scala.collection.mutable.ArrayBuffer
-import controllers.Assets
+import scala.language.postfixOps
+
 
 case class Product(
     id: Long, 
