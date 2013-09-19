@@ -19,13 +19,13 @@ object Products extends Controller with Secured {
           "description" -> nonEmptyText)
   )
   
-  def products = WithSomePermission(Perm.ViewProducts + Perm.EditProducts) 
+  def products = WithPermission(Perm.ViewProducts + Perm.EditProducts) 
   { implicit request => 
     Ok(views.html.products.index(Product.all()))
   }
   
   def viewProduct(id: Long) = 
-    WithSomePermission(Perm.ViewProducts + Perm.EditProducts)
+    WithPermission(Perm.ViewProducts + Perm.EditProducts)
   { implicit request => 
     val product = Product.find(id)
     product match { 
@@ -123,14 +123,14 @@ object Products extends Controller with Secured {
   }
   
   def deleteFile(id: Long, filename:String) = 
-    WithPermissions(Perm.ViewProducts)
+    WithPermissions(Perm.ViewProducts + Perm.EditProducts)
   { implicit request => 
     getProductFilePath(id, filename).delete()
     Redirect(routes.Products.editProduct(id))
   }
   
   def uploadProductFile(id: Long) = 
-    WithPermissions(Perm.ViewProducts)(parse.multipartFormData)
+    WithPermissions(Perm.ViewProducts + Perm.EditProducts)(parse.multipartFormData)
   { implicit request =>
      request.body.file("fileUpload").map { fileUpload =>
        val filename = fileUpload.filename 
