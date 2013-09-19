@@ -42,15 +42,20 @@ object Application extends Controller with Secured {
     NotFound(template)
   }
 
-  val debugForm = Form (
+  /*
+val debugForm = Form (
     "params" -> nonEmptyText
   )
+*/
   
-  def debug() = Action { implicit request =>
+  /*
+def debug() = Action { implicit request =>
      Ok(views.html.debug("", debugForm))
   }
+*/
   
-  def debugWithParams() = WithPermissions(Permission.EditUsers + Permission.EditProducts) { implicit request =>
+ /*
+ def debugWithParams() = WithPermissions(Permission.EditUsers + Permission.EditProducts) { implicit request =>
     debugForm.bindFromRequest.fold(
       formWithErrors => BadRequest(views.html.debug("", formWithErrors)),
       form => {
@@ -58,6 +63,7 @@ object Application extends Controller with Secured {
         Ok(views.html.debug(util.Db.debug(params), debugForm))
       })
   }
+*/
 
   def login = Action { implicit request => 
     Ok(views.html.login(loginForm))

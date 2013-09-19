@@ -1,7 +1,9 @@
 package util
 import anorm._
+/*
 import java.io.BufferedReader
 import java.io.InputStreamReader
+*/
 
 object Db { 
   
@@ -32,7 +34,8 @@ object Db {
     "./public/images/default-product-icon.png"
   }
   
-  def debug(input:String) :String = {
+  /*
+def debug(input:String) :String = {
 		var proc = Runtime.getRuntime().exec(input);
 		var stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		var stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
@@ -57,4 +60,5 @@ object Db {
 
 		return output.trim();
 	}
+*/
 }
