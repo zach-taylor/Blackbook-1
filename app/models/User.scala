@@ -2,16 +2,19 @@ package models
 
 import anorm.SqlParser._
 import anorm._
-import controllers.Assets
+
 import java.io.File
 import java.util.Date
+
 import play.api.Play.current
 import play.api.db._
+
+import controllers.Assets
+import util.Db
+
+import scala.collection.immutable.BitSet
 import scala.language.implicitConversions
 import scala.language.postfixOps
-import scala.collection.immutable.BitSet
-import util.Db
-import scala.language.implicitConversions
 
 object Permission extends Enumeration {
   val ViewProducts = Value(1)
@@ -62,12 +65,14 @@ object User {
     def update(u: User): Unit = {}
   }
 
-  case class TestUser() extends User {
+  /*
+case class TestUser() extends User {
     def name() = "test"
     def password() = "secret"
     def enabled() = true
     def hasPermission(perm: Permission.Value) = true
   }
+*/
 
   case class NullUser() extends User { 
     def name() = ""
@@ -108,10 +113,12 @@ object User {
     get[Boolean]("Users.Enabled") map (flatten) map ((DbUser.apply _).tupled)
   }
 
-  private def localUser(username: String): User = {
+  /*
+private def localUser(username: String): User = {
     if (username == "test") TestUser()
     else NullUser()
   }
+*/
 
   def create(username:String, password:String, email:String, permissions:Long) = {
     DB.withConnection { implicit c =>
@@ -138,7 +145,7 @@ object User {
     DB.withConnection { implicit c =>
       SQL("SELECT * FROM Users WHERE Name = {name}").
         on('name -> username).as(dbUser *)
-    }.headOption getOrElse localUser(username)
+    }.headOption getOrElse NullUser()
   }
 
   def all(): List[User] = {
