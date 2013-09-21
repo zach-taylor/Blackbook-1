@@ -12,7 +12,8 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "postgresql" % "postgresql" %"9.1-901.jdbc4",
-    filters
+    filters,
+    "org.mindrot" % "jbcrypt" % "0.3m"
   )
 
 
