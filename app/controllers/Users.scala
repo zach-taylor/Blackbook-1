@@ -8,7 +8,6 @@ import java.util.Date
 import models._
 import traits._
 
-import org.mindrot.jbcrypt._
 
 object Users extends Controller with Secured {
   
@@ -47,7 +46,7 @@ object Users extends Controller with Secured {
       formWithErrors => BadRequest(views.html.users.edit(User.find(username), formWithErrors)),
       form => {
         val (password, email, permissions) = form
-        User.update(username, BCrypt.hashpw(password,BCrypt.gensalt()), email, permissions)
+        User.update(username, password, email, permissions)
         Ok(views.html.users.index(User.all))
       })
   }
@@ -61,7 +60,7 @@ object Users extends Controller with Secured {
       formWithErrors => BadRequest(views.html.users.newUser(User.all, formWithErrors)),
       form => {
         val (name, password, email, permissions) = form
-        User.create(name, BCrypt.hashpw(password,BCrypt.gensalt()), email, permissions)
+        User.create(name, password, email, permissions)
         Ok(views.html.users.index(User.all))
       })
   }

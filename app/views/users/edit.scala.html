@@ -14,7 +14,7 @@
 	  <h1>User: @userToEdit.name</h1>
 	  @form(CSRF(routes.Users.updateUser(userToEdit.name))) {
 	    @inputText(userForm("email"), args = '_label -> "Email", 'class -> "fancy-input") 
-	    @inputText(userForm("password"), args = '_label -> "Password", 'class -> "fancy-input") 
+	    @inputPassword(userForm("password"), args = '_label -> "Password", 'class -> "fancy-input") 
 	    <input type="hidden" id="permissions" name="permissions" value="@Permission.setToLong(userToEdit.getPermissions())">
 	    <div>
 	       <div style="float:left;">

@@ -16,8 +16,6 @@ import scala.collection.immutable.BitSet
 import scala.language.implicitConversions
 import scala.language.postfixOps
 
-import org.mindrot.jbcrypt._
-
 object Permission extends Enumeration {
   val ViewProducts = Value(1)
   val EditProducts = Value(2)
@@ -62,7 +60,7 @@ object User {
     def anyPermissions(): Boolean = 
       getPermissions != Permission.Set.empty
 
-    def authenticate(token: String): Boolean = (BCrypt.checkpw(token,password))
+    def authenticate(token: String): Boolean = (token == password)
     
     def update(u: User): Unit = {}
   }
@@ -97,7 +95,7 @@ case class TestUser() extends User {
         val query = SQL("""
           UPDATE Users SET LastLogin = now() 
           WHERE Name = {name}
-          AND Password = {password}
+          AND hashedPassword = crypt({password}, hashedPassword)
         """).on('name -> username, 'password -> password)
         
         // users can authenticate via database lookup or via browser session
@@ -109,7 +107,7 @@ case class TestUser() extends User {
   // Parses a DB user from a SQL result set.
   val dbUser = {
     get[String]("Users.Name") ~
-    get[String]("Users.Password") ~
+    get[String]("Users.hashedPassword") ~
     get[String]("Users.Email") ~
     get[Long]("Users.Permissions") ~
     get[Boolean]("Users.Enabled") map (flatten) map ((DbUser.apply _).tupled)
@@ -124,14 +122,14 @@ private def localUser(username: String): User = {
 
   def create(username:String, password:String, email:String, permissions:Long) = {
     DB.withConnection { implicit c =>
-      SQL("INSERT INTO Users(Name,Password,Email,Permissions) VALUES ({name},{password},{email},{permissions})").on(
+      SQL("INSERT INTO Users(Name,hashedPassword,Email,Permissions) VALUES ({name},crypt({password},gen_salt('md5')),{email},{permissions})").on(
         'name -> Db.normalizeName(username), 'password -> password, 'email -> email, 'permissions -> permissions).executeUpdate()
     }
   }
   
   def update(username:String, password:String, email:String, permissions:Long) = {
     DB.withConnection { implicit c =>
-      SQL("UPDATE Users SET Password={password}, Email={email}, Permissions={permissions} WHERE Name={username}").on(
+      SQL("UPDATE Users SET hashedPassword=crypt({password},gen_salt('md5')), Email={email}, Permissions={permissions} WHERE Name={username}").on(
         'username -> username, 'password -> password, 'email -> email, 'permissions -> permissions).executeUpdate()
     }
   }
