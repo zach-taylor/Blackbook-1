@@ -16,6 +16,8 @@ import scala.collection.immutable.BitSet
 import scala.language.implicitConversions
 import scala.language.postfixOps
 
+import org.mindrot.jbcrypt._
+
 object Permission extends Enumeration {
   val ViewProducts = Value(1)
   val EditProducts = Value(2)
@@ -60,7 +62,7 @@ object User {
     def anyPermissions(): Boolean = 
       getPermissions != Permission.Set.empty
 
-    def authenticate(token: String): Boolean = (token == password)
+    def authenticate(token: String): Boolean = (BCrypt.checkpw(token,password))
     
     def update(u: User): Unit = {}
   }
@@ -99,7 +101,7 @@ case class TestUser() extends User {
         """).on('name -> username, 'password -> password)
         
         // users can authenticate via database lookup or via browser session
-        return (query.executeUpdate() > 0) || password == "@application.secret"
+        return (query.executeUpdate() > 0)
       }
     }
   }
